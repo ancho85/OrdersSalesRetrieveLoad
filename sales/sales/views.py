@@ -1,11 +1,15 @@
 # encoding: ISO8859-1
 from celery import shared_task
+import redis
 import json
 import lzstring
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
+
+# Crea una conexión a la instancia de Redis
+redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0
 
 @shared_task
 def save_sales_data(data):
