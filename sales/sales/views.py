@@ -9,7 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 # Crea una conexión a la instancia de Redis
-redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0
+redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 
 @shared_task
 def save_sales_data(data):
@@ -25,12 +26,14 @@ def save_sales_data(data):
     # (por ejemplo, redis-py)
     redis_connection.set('sales_data', compressed_data)
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class SaveSalesDataView(View):
     def post(self, request, *args, **kwargs):
         data = request.POST.get('data')
         save_sales_data.delay(data)
         return JsonResponse({'status': 'success'})
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RetrieveDataView(View):
