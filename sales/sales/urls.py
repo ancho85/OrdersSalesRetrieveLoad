@@ -20,5 +20,5 @@ from sales.views import SaveSalesDataView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('save_sales_data/', SaveSalesDataView.as_view(), nmae="save_sales_data"),
+    path('save_sales_data/', SaveSalesDataView.as_view(), name="save_sales_data"),
 ]
