@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from sales.views import SaveSalesDataView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('save_sales_data/', SaveSalesDataView.as_view(), nmae="save_sales_data"),
 ]
