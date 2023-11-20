@@ -1,3 +1,4 @@
+# encoding: ISO8859-1
 from celery import shared_task
 import json
 import lzstring
