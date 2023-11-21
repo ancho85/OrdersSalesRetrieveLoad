@@ -1,0 +1,11 @@
+ {
+   "clientes":
+     {
+       "10": {"nombrefantasia": "beto1", "ruc": "8000000-1"},
+       "20": {"nombrefantasia": "beto2", "ruc": "8000000-1"}
+     },
+   "articulos": {
+     "KB1": {"nombre": "teclado1", "precio": 20},
+     "KB2": {"nombre": "teclado2", "precio": 30}
+   }
+ }

@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from sales.views import SaveSalesDataView
+from sales import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('save_sales_data/', SaveSalesDataView.as_view(), name="save_sales_data"),
+    path('save_sales_data/', views.SaveSalesDataView.as_view(), name="save_sales_data"),
+    path('get_sales_data/', views.RetrieveDataView.as_view(), name="get_sales_data"),
 ]

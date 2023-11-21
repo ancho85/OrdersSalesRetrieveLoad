@@ -13,24 +13,16 @@ redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 @shared_task
-def save_sales_data(data):
-    # Crear la estructura de datos y convertirla a JSON
-    gart = {...}  # Estructura de datos
-    json_data = json.dumps(gart)
-
-    # Comprimir el JSON con lzstring
+def save_sales_data(gart):
+    json_data = gart  # json.dumps(gart)
     compressed_data = lzstring.LZString().compressToBase64(json_data)
-
-    # Guardar la estructura comprimida en Redis
-    # Aquí debes usar la biblioteca de Python para Redis que estés utilizando
-    # (por ejemplo, redis-py)
     redis_connection.set('sales_data', compressed_data)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class SaveSalesDataView(View):
     def post(self, request, *args, **kwargs):
-        data = request.POST.get('data')
+        data = request.body.decode()  # decode it from byte
         save_sales_data.delay(data)
         return JsonResponse({'status': 'success'})
 
@@ -38,14 +30,7 @@ class SaveSalesDataView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class RetrieveDataView(View):
     def get(self, request, *args, **kwargs):
-        # Recuperar datos desde Redis
         compressed_data = redis_connection.get('sales_data')
-
-        # Descomprimir datos con lzstring
-        decompressed_data = lzstring.LZString().decompressFromBase64(compressed_data)
-
-        # Almacenar datos en el LocalStorage
-        # Implementa la lógica necesaria para almacenar en el LocalStorage del cliente
-        # Puedes usar JavaScript para esto
-
-        return JsonResponse({'status': 'success'})
+        decoded_data = compressed_data.decode()  # decode it from byte
+        decompressed_data = lzstring.LZString().decompressFromBase64(decoded_data)
+        return JsonResponse({'status': 'success', "data": decompressed_data})
