@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
+from .tools import jsonconvert
+from .tasks import save_orders_clients
 
 redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -34,4 +36,7 @@ class RetrieveDataView(View):
         compressed_data = redis_connection.get('sales_data')
         decoded_data = compressed_data.decode()  # decode it from byte
         decompressed_data = lzstring.LZString().decompressFromBase64(decoded_data)
+        data_dict = json.loads(decompressed_data, encoding='iso-8859-1', object_hook=jsonconvert)
+        for cus in data_dict["clientes"]:
+            save_orders_clients(cus)
         return JsonResponse({'status': 'success', "data": decompressed_data})
