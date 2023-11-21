@@ -5,3 +5,4 @@ celery
 redis
 django-redis
 lzstring
+sentry-sdk[django]

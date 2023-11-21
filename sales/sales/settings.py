@@ -143,3 +143,17 @@ CACHES = {
 # Configuración de SESSION_ENGINE para usar django-redis como backend de sesiones
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://dcd1cb1471925fa8d525f30f5a829da7@o4506264257560576.ingest.sentry.io/4506264260050944",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)

@@ -8,20 +8,21 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
 
-# Crea una conexión a la instancia de Redis
 redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 @shared_task
 def save_sales_data(gart):
-    json_data = gart  # json.dumps(gart)
-    compressed_data = lzstring.LZString().compressToBase64(json_data)
+    if type(gart) == dict:
+        gart = json.dumps(gart)
+    compressed_data = lzstring.LZString().compressToBase64(gart)
     redis_connection.set('sales_data', compressed_data)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class SaveSalesDataView(View):
     def post(self, request, *args, **kwargs):
+        # data = request.POST  # this is an empty dict! Can't tell why. Using instead request.body
         data = request.body.decode()  # decode it from byte
         save_sales_data.delay(data)
         return JsonResponse({'status': 'success'})

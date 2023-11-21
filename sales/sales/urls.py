@@ -17,9 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from sales import views
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('save_sales_data/', views.SaveSalesDataView.as_view(), name="save_sales_data"),
     path('get_sales_data/', views.RetrieveDataView.as_view(), name="get_sales_data"),
+    path('sentry-debug/', trigger_error),
 ]
