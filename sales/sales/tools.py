@@ -87,6 +87,9 @@ def jsonconvert(data):
         return dict([(jsonconvert(key), jsonconvert(value)) for key, value in data.items()])
     elif isinstance(data, (list, tuple)):
         return [jsonconvert(element) for element in data]
+    elif isinstance(data, bytes):
+        #return jsonconvert(str(data, 'utf-8'))
+        return jsonconvert(data.decode())
     elif isinstance(data, str):
         try:
             data = data.encode('ascii')
