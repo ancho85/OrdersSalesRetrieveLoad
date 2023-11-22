@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Index</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/lz-string@1/dist/lz-string.min.js"></script>
+<script src="redis/redis.js"></script>
+<body>
+    <h1>Django Index</h1>
+
+    <script>
+        // Connect to Redis server
+        const redis = new Redis('localhost');
+
+        // Retrieve compressed data from Redis
+        redis.get('sales_data', function(err, data) {
+            if (err) {
+                console.error('Error retrieving compressed data:', err);
+                return;
+            }
+
+            // Save compressed data to local storage
+            localStorage.setItem('sales_data', data);
+
+            // Uncompress data with lzstring
+            const uncompressedData = LZString.decompress(data);
+            console.log('Uncompressed data:', uncompressedData);
+        });
+    </script>
+</body>
+</html>
