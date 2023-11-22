@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
+from django.views.generic import TemplateView
 from .tasks import save_orders_clients
 
 redis_connection = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -38,3 +39,7 @@ class RetrieveDataView(View):
         decoded_data = compressed_data.decode()  # decode it from byte
         save_orders_clients(decoded_data)
         return JsonResponse({'status': 'success'})
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'

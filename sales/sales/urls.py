@@ -22,7 +22,7 @@ def trigger_error(request):
 
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.IndexView.as_view(), name="index"),
     path('admin/', admin.site.urls),
     path('save_sales_data/', views.SaveSalesDataView.as_view(), name="save_sales_data"),
     path('get_sales_data/', views.RetrieveDataView.as_view(), name="get_sales_data"),
