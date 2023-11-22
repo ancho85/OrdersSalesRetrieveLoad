@@ -26,5 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('save_sales_data/', views.SaveSalesDataView.as_view(), name="save_sales_data"),
     path('get_sales_data/', views.RetrieveDataView.as_view(), name="get_sales_data"),
+    path('save_orders_clients/', views.SaveOrders.as_view(), name="save_orders_clients"),
     path('sentry-debug/', trigger_error),
 ]

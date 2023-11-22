@@ -37,7 +37,52 @@
                 const decompressedData = LZString.decompressFromBase64(compressedData);
                 const jsonData = JSON.parse(decompressedData);
                 console.log('Data retrieved and decompressed from localStorage:', jsonData);
-                // You can now use the jsonData in your frontend as needed
+
+                const orders = {};
+                jsonData.forEach(item => {
+                            const clientId = item.clientId;
+
+                            if (!orders[clientId]) {
+                                orders[clientId] = [];
+                            }
+
+                            const orderData = {
+                                pedido_numero:item.pedido_numero,
+                                pdvobj_id:clientId,
+                                doc_tipo:item.doc_tipo,
+                                doc_fecha:item.doc_fecha,
+                                doc_numero:item.doc_numero,
+                                anulado_040:item.anulado_040,
+                                anulado_040_fecha:item.anulado_040_fecha,
+                                anulado_040_por_gecos:item.anulado_040_por_gecos,
+                                articulo_id: item.articulo_id,
+                                precio_unitario: item.precio_unitario,
+                                gravada_10: item.gravada_10,
+                                iva_10: item.iva_10,
+                            };
+
+                            orders[clientId].push(orderData);
+                });
+                const ordersJSON = JSON.stringify(orders);
+                const compressedOrdersJSON = LZString.compressToBase64(ordersJSON);
+                localStorage.setItem('ordersData', compressedOrdersJSON);
+                const retrievedData = localStorage.getItem('ordersData');
+                if (retrievedData) {
+                    const apiUrl = 'http://127.0.0.1:8000/save_orders_clients/';
+
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ ordersData: retrievedData }),
+                    })
+                    .then(response => response.json())
+                    .then(result => console.log('Data sent to the endpoint:', result))
+                    .catch(error => console.error('Error sending data to the endpoint:', error));
+                } else {
+                    console.warn('No orders data found in localStorage');
+                }
             } else {
                 console.warn('No compressed data found in localStorage');
             }

@@ -41,5 +41,14 @@ class RetrieveDataView(View):
         return JsonResponse({'status': 'success', 'data': decoded_data})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class SaveOrders(View):
+    def post(self, request, *args, **kwargs):
+        # data = request.POST  # this is an empty dict! Can't tell why. Using instead request.body
+        data = request.body.decode()  # decode it from byte
+        save_orders_clients.delay(data)
+        return JsonResponse({'status': 'success'})
+
+
 class IndexView(TemplateView):
     template_name = 'index.html'
