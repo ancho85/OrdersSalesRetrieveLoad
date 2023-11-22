@@ -37,8 +37,8 @@ class RetrieveDataView(View):
     def get(self, request, *args, **kwargs):
         compressed_data = redis_connection.get('sales_data')
         decoded_data = compressed_data.decode()  # decode it from byte
-        save_orders_clients(decoded_data)
-        return JsonResponse({'status': 'success'})
+        # save_orders_clients(decoded_data)
+        return JsonResponse({'status': 'success', 'data': decoded_data})
 
 
 class IndexView(TemplateView):

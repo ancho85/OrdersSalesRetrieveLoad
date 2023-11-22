@@ -19,8 +19,12 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    localStorage.setItem('sales_data', data);  // data is already compressed in redis db with base64
-                    console.log('Data retrieved and saved to localStorage:', data);
+                    if (data["status"] === "success"){
+                        localStorage.setItem('sales_data', data["data"]);  // data is already compressed in redis db with base64
+                        console.log('Data retrieved and saved to localStorage:', data["data"]);
+                    } else {
+                        console.error('Error fetching data:', 'Error from endpoint')
+                    }
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
